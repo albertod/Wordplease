@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <h1>Welcome to Wordplease</h1>
+
+    {%if post_list|length > 0 %}
+        <h2>Latest posts</h2>
+        <ul>
+        {% for post in post_list %}
+            <a href="" >{{ post.title }}</a> by: <br>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Be the first to publish a post</p>
+    {%endif%}
+{% endblock %}
