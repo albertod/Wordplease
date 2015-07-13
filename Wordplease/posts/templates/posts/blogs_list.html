@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <h1>Welcome to Wordplease</h1>
+
+    {%if blogs_list|length > 0 %}
+       <ul>
+            {% for blog in blogs_list %}
+               <a href="{% url 'posts:blog_user' blog.user.username %}">{{ blog.blog_title }}</a> by: {{ blog.user.username}} <br>
+            {% endfor %}
+        </ul>
+    {%endif%}
+{% endblock %}

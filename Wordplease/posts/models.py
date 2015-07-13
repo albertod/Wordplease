@@ -8,6 +8,8 @@ ACTION = 'ACT'
 COMEDY = 'CMD'
 SAD = 'SAD'
 TECHNOLOGY = 'TEC'
+SPORT = 'SPO'
+ANIMALS = 'ANI'
 
 CATEGORY = (
     (UNDEFINED, 'Undefined'),
@@ -15,11 +17,21 @@ CATEGORY = (
     (COMEDY, 'Comedy'),
     (SAD, 'Sad'),
     (TECHNOLOGY, 'Technology'),
+    (SPORT, 'Sports'),
+    (ANIMALS, 'Animals')
 )
 
-class Post(models.Model):
 
-    owner = models.ForeignKey(User)
+class Blog(models.Model):
+    user = models.OneToOneField(User)
+    blog_title = models.CharField(max_length=150, default="")
+
+    def __str__(self):
+        return self.blog_title
+
+
+class Post(models.Model):
+    blog = models.ForeignKey(Blog)
     title = models.CharField(max_length=150)
     summary = models.CharField(max_length=300)
     body = models.TextField(blank=True, default="")
@@ -27,6 +39,6 @@ class Post(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=3, choices=CATEGORY, default=UNDEFINED)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 

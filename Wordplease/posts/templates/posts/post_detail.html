@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block section %}
+    <h1>Welcome to Wordplease</h1>
+
+    <h2>{{ post.title }}</h2>
+    <h4>{{ post. summary }}</h4>
+
+    <p>{{ post. body}}</p>
+    <img src="{{ post.image_url }}">
+    <br>
+    <p>{{ post.date_published}}</p>
+    <p>{{ post.category }}</p>
+{% endblock %}
