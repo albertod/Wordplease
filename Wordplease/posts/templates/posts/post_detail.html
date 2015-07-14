@@ -4,10 +4,11 @@
     <h1>Welcome to Wordplease</h1>
 
     <h2>{{ post.title }}</h2>
-    <h4>{{ post. summary }}</h4>
+    <h4>{{ post.summary }}</h4>
+    <h6>by: {{post.blog.user.username}} </h6>
 
-    <p>{{ post. body}}</p>
-    <img src="{{ post.image_url }}">
+    <p>{{ post.body}}</p>
+    <img src="{{ post.image_url }}" height="500" width="500">
     <br>
     <p>{{ post.date_published}}</p>
     <p>{{ post.category }}</p>

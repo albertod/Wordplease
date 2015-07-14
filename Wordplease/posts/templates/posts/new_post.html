@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %} New Post {% endblock %}
+
+{% block section %}
+
+    {% if user.is_authenticated %}
+
+        {% for error in errors %}
+            <p>{{ error }}</p>
+        {% endfor %}
+
+         <form method="post">
+            {% csrf_token %}
+           {{ newpost_form.as_p }}
+             <div>
+                 <button>Post</button>
+             </div>
+        </form>
+
+    {% else %}
+        <h2>Please <a href="">Sign IN</a> to create a post</h2>
+    {% endif %}
+
+{% endblock %}

@@ -6,7 +6,8 @@
     {%if posts_list|length > 0 %}
        <ul>
             {% for post in posts_list %}
-               <a href="{% url 'posts:post_detail' post.pk %}" >{{ post.title }}</a> by: {{ post.blog.user.username }} <br>
+               <a href="{% url 'posts:post_detail' post.blog.user.username post.pk %}" >{{ post.title }}</a> by: {{ post.blog.user.username}}
+               <p>{{ post.summary }} <img src="{{ post.image_url }}" height="50" width="50"></p><br>
             {% endfor %}
         </ul>
     {%endif%}

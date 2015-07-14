@@ -7,7 +7,8 @@
         <a href="{% url 'posts:blogs' %}"><h2>All Blogs</h2></a>
         <ul>
             {% for post in post_list %}
-                 <a href="" >{{ post.title }}</a> by: <a href="">{{ post.owner.first_name }} </a> {{ post.summary}} <img src="{{ post.image_url }}" height="50" width="50"> <br>
+                <a href="{% url 'posts:post_detail' post.blog.user.username post.pk %}" >{{ post.title }}</a> by: {{ post.blog.user.username}}
+                <p>{{ post.summary }} <img src="{{ post.image_url }}" height="50" width="50"></p><br>
             {% endfor %}
         </ul>
     {% else %}

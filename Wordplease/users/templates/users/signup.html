@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Sign In {% endblock %}
-
+{% block title %} Sign Up {% endblock %}
 
 {% block section %}
 
@@ -11,9 +10,9 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ login_form.as_p }}
+    {{ signup_form.as_table }}
     <div>
-        <button>Sign In</button>
+        <button>Sign Up</button>
     </div>
 </form>
 {% endblock %}.
