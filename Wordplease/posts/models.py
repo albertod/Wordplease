@@ -26,6 +26,7 @@ class Blog(models.Model):
     user = models.OneToOneField(User)
     blog_title = models.CharField(max_length=150, default="")
 
+
     def __str__(self):
         return self.blog_title
 

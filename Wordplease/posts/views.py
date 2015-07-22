@@ -1,7 +1,15 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .models import Post, Blog
 from .forms import NewPostForm
+from .serializers import *
+from rest_framework import generics
+from django.utils.decorators import method_decorator
+
 from django.contrib.auth.models import User
+
+
+#URLS
 
 def index(request):
     posts = Post.objects.all().order_by('-date_published')
@@ -69,3 +77,8 @@ def new_post(request):
          }
 
     return render(request, 'posts/new_post.html', context)
+
+
+
+
+
