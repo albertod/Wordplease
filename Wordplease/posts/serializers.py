@@ -7,3 +7,7 @@ class BlogSerializer(serializers.ModelSerializer):
         field = ('id', 'blog_title')
         exclude = ('user', )
 
+class PostSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Post
+        field = ('id', 'title', 'summary', 'body', 'image_url', 'date_published', 'category', 'blog__user__username')

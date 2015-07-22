@@ -40,6 +40,7 @@ class Post(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=3, choices=CATEGORY, default=UNDEFINED)
 
+
     def __str__(self):
         return self.title
 

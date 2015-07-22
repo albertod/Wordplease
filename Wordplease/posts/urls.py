@@ -1,6 +1,6 @@
 from django.conf.urls import include, url
 from . import views
-from .api import BlogsList
+from .api import BlogsList, PostDetailAPI, PostListAPI
 from users.api import UserDetailAPI, UserListAPI
 
 
@@ -14,6 +14,9 @@ urlpatterns = [
 
     #API Blogs and posts
     url(r'api/1.0/blogs/$', BlogsList.as_view(), name='blogs_list_api'),
+    url(r'api/1.0/posts/$', PostListAPI.as_view(), name='posts_list_api'),
+    url(r'api/1.0/posts/(?P<pk>[0-9]+)$', PostDetailAPI.as_view(), name='post_detail_api'),
+
 
     #API Users
     url(r'^api/1.0/users/(?P<pk>[0-9]+)$', UserDetailAPI.as_view(), name='user_detail_api'),
