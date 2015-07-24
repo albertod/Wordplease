@@ -19,7 +19,9 @@ class UserListAPI(GenericAPIView):
         return Response(serialized_users)
 
     def post(self, request):
-        serializer = UserSerializer(data=request.data)
+        # serializer = UserSerializer(data=request.data)
+        user = User()
+        serializer = UserSerializer(instance=user, data=request.data)
         if serializer.is_valid():
             new_user = serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -10,7 +10,8 @@ class BlogSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        field = ('id', 'title', 'summary', 'body', 'image_url', 'date_published', 'category', 'blog__user__username')
+        field = ('id', 'title', 'summary', 'body', 'image_url', 'date_published', 'category')
+        depth = 1
 
 
     def update(self, instance, validated_data):

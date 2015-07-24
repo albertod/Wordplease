@@ -26,9 +26,11 @@ class Blog(models.Model):
     user = models.OneToOneField(User)
     blog_title = models.CharField(max_length=150, default="")
 
-
     def __str__(self):
         return self.blog_title
+
+    def get_absolute_url(self):
+        return "/blogs/%i/" % self.id
 
 
 class Post(models.Model):
@@ -40,7 +42,12 @@ class Post(models.Model):
     date_published = models.DateTimeField(auto_now_add=True)
     category = models.CharField(max_length=3, choices=CATEGORY, default=UNDEFINED)
 
-
     def __str__(self):
         return self.title
+
+    def _get_user_name_(self):
+        return self.blog.user.username
+
+    def _get_user(self):
+        return self.blog.user
 
