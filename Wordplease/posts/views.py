@@ -5,6 +5,7 @@ from .forms import NewPostForm
 from .serializers import *
 from rest_framework import generics
 from django.utils.decorators import method_decorator
+from django.views.generic import DetailView
 
 from django.contrib.auth.models import User
 
@@ -12,7 +13,7 @@ from django.contrib.auth.models import User
 #URLS
 
 def index(request):
-    posts = Post.objects.all().order_by('-date_published')
+    posts = Post.objects.all().filter(privacy='PUB').order_by('-date_published')
     context = {
         'post_list': posts
     }
@@ -27,7 +28,7 @@ def blog_list(request):
 
 def blog_user(request, username):
     blog = Blog.objects.all().filter(user__username=username)
-    posts = Post.objects.filter(blog=blog)
+    posts = Post.objects.filter(blog=blog, privacy='PUB')
     context = {
         'posts_list': posts
     }

@@ -1,7 +1,8 @@
+from django.db.models import Q
 from .permissions import IsOwnerOrReadOnly
 from .models import Blog, Post
 from rest_framework import generics
-from .serializers import BlogSerializer, PostSerializer
+from .serializers import BlogSerializer, PostSerializer, PostReadSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status
@@ -16,8 +17,20 @@ class BlogsList(generics.ListCreateAPIView):
 
 
 class PostListAPI(generics.ListAPIView):
-    queryset = Post.objects.all()
-    serializer_class = PostSerializer
+
+    serializer_class = PostReadSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        if user.is_superuser:
+            return Post.objects.all()
+        elif user.is_active:
+            from_user = Post.objects.filter(blog__user=user)
+            public_post = Post.objects.filter(~Q(blog__user=user), privacy='PUB')
+            return from_user | public_post # this add together the results of the queryes
+        else:
+            return Post.objects.all().filter(privacy='PUB')
 
 
 class PostDetailAPI(generics.GenericAPIView):
