@@ -5,7 +5,7 @@ from rest_framework import generics
 from .serializers import BlogSerializer, PostSerializer, PostReadSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import permissions
 
@@ -18,11 +18,22 @@ class BlogsList(generics.ListCreateAPIView):
 
 class PostListAPI(generics.ListAPIView):
 
-    serializer_class = PostReadSerializer
+    #serializer_class = PostReadSerializer
+
+    def post(self, request):
+        if request.user.is_authenticated():
+            serializer = PostSerializer(data=request.data, context={'user': request.user})
+            if serializer.is_valid():
+                new_post = serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            raise serializers.ValidationError("HAve to be authenticated to create a post")
 
     def get_queryset(self):
         user = self.request.user
-
+        serializers = PostReadSerializer
         if user.is_superuser:
             return Post.objects.all()
         elif user.is_active:
@@ -32,6 +43,12 @@ class PostListAPI(generics.ListAPIView):
         else:
             return Post.objects.all().filter(privacy='PUB')
 
+    def get_serializer_class(self):
+        if self.action == 'post':
+            return PostSerializer
+        if self.action == 'get_query_set':
+            return PostReadSerializer
+        return PostSerializer
 
 class PostDetailAPI(generics.GenericAPIView):
 
