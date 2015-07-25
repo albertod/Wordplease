@@ -1,24 +1,32 @@
+from django.contrib.admin import filters
 from django.db.models import Q
 from .permissions import IsOwnerOrReadOnly
 from .models import Blog, Post
 from rest_framework import generics
+from rest_framework.filters import SearchFilter, OrderingFilter
 from .serializers import BlogSerializer, PostSerializer, PostReadSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from .permissions import IsOwnerOrReadOnly
 from rest_framework import permissions
+from .views import PostsQueryset
 
 #APIS
 
 class BlogsList(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('user__username', )
+    ordering_fields = ('user__username', )
 
 
-class PostListAPI(generics.ListAPIView):
+class PostListAPI(PostsQueryset, generics.ListCreateAPIView):
 
-    #serializer_class = PostReadSerializer
+    filter_backends = (SearchFilter, OrderingFilter)
+    search_fields = ('title', 'summary', )
+    ordering_fields = ('title', 'date_published')
 
     def post(self, request):
         if request.user.is_authenticated():
@@ -29,26 +37,19 @@ class PostListAPI(generics.ListAPIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            raise serializers.ValidationError("HAve to be authenticated to create a post")
+            raise serializers.ValidationError("Have to be authenticated to create a post")
 
     def get_queryset(self):
-        user = self.request.user
-        serializers = PostReadSerializer
-        if user.is_superuser:
-            return Post.objects.all()
-        elif user.is_active:
-            from_user = Post.objects.filter(blog__user=user)
-            public_post = Post.objects.filter(~Q(blog__user=user), privacy='PUB')
-            return from_user | public_post # this add together the results of the queryes
-        else:
-            return Post.objects.all().filter(privacy='PUB')
+        return self.get_posts_queryset(self.request)
 
     def get_serializer_class(self):
-        if self.action == 'post':
+        if self.request.method == 'POST':
             return PostSerializer
-        if self.action == 'get_query_set':
+        if self.request.method == 'GET':
             return PostReadSerializer
         return PostSerializer
+
+
 
 class PostDetailAPI(generics.GenericAPIView):
 

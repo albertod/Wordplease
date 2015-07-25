@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from .models import Post, Blog
 from .forms import NewPostForm
@@ -9,6 +10,19 @@ from django.views.generic import DetailView
 
 from django.contrib.auth.models import User
 
+
+#MixIn class
+
+class PostsQueryset(object):
+
+    def get_posts_queryset(self, request):
+        if not request.user.is_authenticated():
+            posts = Post.objects.filter(privacy='PUB')
+        elif request.user.is_superuser:
+            posts = Post.objects.all()
+        else:
+            posts = Post.objects.filter(Q(blog__user=request.user) | Q(privacy='PUB'))
+        return posts
 
 #URLS
 

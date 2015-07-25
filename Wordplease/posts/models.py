@@ -25,7 +25,6 @@ CATEGORY = (
     (ANIMALS, 'Animals')
 )
 
-
 #Post Availability  (default=Public)
 PRIVATE = 'PRI'
 PUBLIC = 'PUB'
@@ -34,7 +33,6 @@ PRIVACY = (
     (PRIVATE, 'Private'),
     (PUBLIC, 'Public')
 )
-
 
 class Blog(models.Model):
     user = models.OneToOneField(User)
