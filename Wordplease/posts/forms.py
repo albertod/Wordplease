@@ -38,3 +38,14 @@ class NewPostForm(forms.Form):
     body = forms.CharField(label="body")
     image_url = forms.CharField(label="image url")
     category = forms.ChoiceField(label="category", choices=CATEGORY)
+
+class SignupForm(forms.Form):
+
+    username = forms.CharField(label="Username")
+    pwd = forms.CharField(label="Password", widget=forms.PasswordInput())
+    email = forms.CharField(label="Email")
+    blog_title = forms.CharField(label="Blog title")
+
+    #not required files
+    name = forms.CharField(label="Name")
+    last_name = forms.CharField(label="LastName")
