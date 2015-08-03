@@ -45,11 +45,7 @@ class PostSerializer(serializers.ModelSerializer):
         else:
             return data
 
-    def validate(self, data):
-        if Blog.objects.filter(user=self.context['user']).exists():
-            return Blog.objects.filter(user=self.context['user'])[0]
-        else:
-            raise serializers.ValidationError("This users has not a blog registered in the platform")
+
 
 #Serializer solo usado para leer los articulos (title, imagen, summary and date)
 class PostReadSerializer(serializers.ModelSerializer):

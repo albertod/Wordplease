@@ -30,6 +30,7 @@ class PostListAPI(PostsQueryset, generics.ListCreateAPIView):
 
     def post(self, request):
         if request.user.is_authenticated():
+            serializer_class = PostSerializer
             serializer = PostSerializer(data=request.data, context={'user': request.user})
             if serializer.is_valid():
                 new_post = serializer.save()
@@ -40,6 +41,7 @@ class PostListAPI(PostsQueryset, generics.ListCreateAPIView):
             raise serializers.ValidationError("Have to be authenticated to create a post")
 
     def get_queryset(self):
+        serializer_class = PostReadSerializer
         return self.get_posts_queryset(self.request)
 
     def get_serializer_class(self):
